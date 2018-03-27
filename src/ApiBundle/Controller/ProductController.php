@@ -3,6 +3,7 @@
 namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Product;
+use ApiBundle\Form\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -52,11 +53,8 @@ class ProductController extends Controller
 		$doctrine = $this->getDoctrine()->getManager();
 
 		$product = new Product();
-
-		$product->setName($data['name']);
-		$product->setDescription($data['description']);
-		$product->setContent($data['content']);
-		$product->setPrice($data['price']);
+		$form = $this->createForm(ProductType::class, $product);
+		$form->submit($data);
 
 		$doctrine->persist($product);
 		$doctrine->flush();
@@ -78,10 +76,12 @@ class ProductController extends Controller
 		$product = $doctrine->getRepository('ApiBundle:Product')
 						    ->find($data['id']);
 
-		$product->setName($data['name']);
-		$product->setDescription($data['description']);
-		$product->setContent($data['content']);
-		$product->setPrice($data['price']);
+		if(!$product) {
+			return $this->createNotFoundException('Produto não encontrado!');
+		}
+
+		$form = $this->createForm(ProductType::class, $product);
+		$form->submit($data);
 
 		$manager->merge($product);
 		$manager->flush();
