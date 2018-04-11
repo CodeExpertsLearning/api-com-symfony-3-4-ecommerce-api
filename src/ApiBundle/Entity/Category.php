@@ -4,6 +4,8 @@ namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
+use JMS\Serializer\Annotation as JMS;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Category
@@ -19,6 +21,7 @@ class Category
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Groups({"prod_single", "cat_index"})
      */
     private $id;
 
@@ -26,6 +29,7 @@ class Category
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @JMS\Groups({"prod_single", "cat_index"})
      */
     private $name;
 
@@ -33,6 +37,7 @@ class Category
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)
+     @JMS\Groups({"cat_index"})
      */
     private $description;
 
@@ -42,6 +47,7 @@ class Category
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      *
      * @Gedmo\Slug(fields={"name"})
+     * @JMS\Groups({"cat_index"})
      */
     private $slug;
 
@@ -63,8 +69,19 @@ class Category
      */
     private $updatedAt;
 
+	/**
+	 * @ORM\ManyToMany(targetEntity="Product", mappedBy="categoryCollection")
+	 * @JMS\Groups({"cat_single"})
+	 */
+    private $productCollection;
 
-    /**
+    public function __construct()
+    {
+    	$this->productCollection = new ArrayCollection();
+    }
+
+
+	/**
      * Get id
      *
      * @return int

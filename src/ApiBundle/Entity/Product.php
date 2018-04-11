@@ -4,6 +4,8 @@ namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
+use JMS\Serializer\Annotation as JMS;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Product
@@ -19,6 +21,7 @@ class Product
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Groups({"prod_index", "cat_single"})
      */
     private $id;
 
@@ -26,6 +29,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @JMS\Groups({"prod_index", "cat_single"})
      */
     private $name;
 
@@ -33,6 +37,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)
+     * @JMS\Groups({"prod_index", "cat_single"})
      */
     private $description;
 
@@ -40,6 +45,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @JMS\Groups({"prod_single"})
      */
     private $content;
 
@@ -47,6 +53,7 @@ class Product
      * @var bool
      *
      * @ORM\Column(name="price", type="float", precision=2)
+     * @JMS\Groups({"prod_index", "cat_single"})
      */
     private $price;
 
@@ -55,6 +62,7 @@ class Product
      *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      * @Gedmo\Slug(fields={"name"})
+     * @JMS\Groups({"prod_index", "cat_single"})
      */
     private $slug;
 
@@ -74,8 +82,20 @@ class Product
      */
     private $updatedAt;
 
+	/**
+	 * @ORM\ManyToMany(targetEntity="Category", inversedBy="productCollection")
+	 * @ORM\JoinTable(name="products_categories")
+	 * @JMS\Groups({"prod_single"})
+	 */
+    private $categoryCollection;
 
-    /**
+    public function __construct()
+    {
+    	$this->categoryCollection = new ArrayCollection();
+    }
+
+
+	/**
      * Get id
      *
      * @return int
@@ -252,5 +272,25 @@ class Product
     {
         return $this->updatedAt;
     }
+
+	/**
+	 * @return mixed
+	 */
+	public function getCategoryCollection()
+	{
+		return $this->categoryCollection;
+	}
+
+	/**
+	 * @param mixed $categoryCollection
+	 */
+	public function setCategoryCollection($categoryCollection)
+	{
+		if($this->categoryCollection->contains($categoryCollection)) {
+			return;
+		}
+
+		$this->categoryCollection->add($categoryCollection);
+	}
 }
 

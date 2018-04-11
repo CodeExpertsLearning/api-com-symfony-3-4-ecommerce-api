@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Category;
 use ApiBundle\Form\CategoryType;
+use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,7 +27,10 @@ class CategoryController extends Controller
 	                   ->getRepository('ApiBundle:Category')
 	                   ->findAll();
 
-		$categories = $this->get('jms_serializer')->serialize($categories, 'json');
+		$categories = $this->get('jms_serializer')->serialize(
+			$categories,
+			'json',
+			SerializationContext::create()->setGroups(['cat_index']));
 
 		return new Response($categories, 200);
 	}
@@ -37,7 +41,10 @@ class CategoryController extends Controller
 	 */
 	public function show(Category $category)
 	{
-		$category = $this->get('jms_serializer')->serialize($category, 'json');
+		$category = $this->get('jms_serializer')->serialize(
+			$category,
+			'json',
+			SerializationContext::create()->setGroups(['cat_index', 'cat_single']));
 
 		return new Response($category, 200);
 	}

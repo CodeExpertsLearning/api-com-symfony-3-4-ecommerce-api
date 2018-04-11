@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Product;
 use ApiBundle\Form\ProductType;
+use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,7 +27,11 @@ class ProductController extends Controller
                           ->getRepository('ApiBundle:Product')
 	                      ->findAll();
 
-         $products = $this->get('jms_serializer')->serialize($products, 'json');
+         $products = $this->get('jms_serializer')
+                          ->serialize($products,
+	                                  'json',
+                                      SerializationContext::create()->setGroups(['prod_index'])
+	                          );
 
          return new Response($products, 200);
 	}
@@ -37,7 +42,11 @@ class ProductController extends Controller
 	 */
 	public function show(Product $product)
 	{
-		$product = $this->get('jms_serializer')->serialize($product, 'json');
+		$product = $this->get('jms_serializer')->serialize(
+													$product,
+													'json',
+													SerializationContext::create()->setGroups(['prod_index', 'prod_single'])
+			);
 
 		return new Response($product, 200);
 	}
