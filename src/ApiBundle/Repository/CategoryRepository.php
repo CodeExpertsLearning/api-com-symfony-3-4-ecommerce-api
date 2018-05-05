@@ -10,4 +10,8 @@ namespace ApiBundle\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findAllCategories()
+	{
+		return $this->createQueryBuilder('c');
+	}
 }

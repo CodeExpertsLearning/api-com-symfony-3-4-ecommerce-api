@@ -10,4 +10,15 @@ namespace ApiBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findAllProducts($search = '')
+	{
+		$queryBuilder = $this->createQueryBuilder('p');
+
+		if($search) {
+			$queryBuilder->andWhere('p.name LIKE :search')
+				->setParameter('search', '%' . $search . '%');
+		}
+
+		return $queryBuilder;
+	}
 }

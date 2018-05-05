@@ -5,6 +5,8 @@ namespace ApiBundle\Controller;
 use ApiBundle\Entity\Product;
 use ApiBundle\Form\ProductType;
 use JMS\Serializer\SerializationContext;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,14 +23,19 @@ class ProductController extends Controller
 	 * @Route("/", name="products_main")
 	 * @Method("GET")
 	 */
-	public function index()
+	public function index(Request $request)
 	{
+		$search = $request->get('search', '');
+
          $products = $this->getDoctrine()
                           ->getRepository('ApiBundle:Product')
-	                      ->findAll();
+	                      ->findAllProducts($search);
+
+		 $data = $this->get('ApiBundle\Service\Pagination\PaginationFactory')
+		              ->paginate($products, $request, 'products_main');
 
          $products = $this->get('jms_serializer')
-                          ->serialize($products,
+                          ->serialize($data,
 	                                  'json',
                                       SerializationContext::create()->setGroups(['prod_index'])
 	                          );

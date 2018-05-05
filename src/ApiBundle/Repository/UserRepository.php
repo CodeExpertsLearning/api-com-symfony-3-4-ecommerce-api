@@ -10,4 +10,9 @@ namespace ApiBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+	public function findAllUsers()
+	{
+		return $this->createQueryBuilder('u');
+	}
 }

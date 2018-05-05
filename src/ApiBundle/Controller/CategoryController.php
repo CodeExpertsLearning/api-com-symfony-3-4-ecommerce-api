@@ -21,14 +21,17 @@ class CategoryController extends Controller
 	 * @Route("/", name="categories_index")
 	 * @Method("GET")
 	 */
-	public function index()
+	public function index(Request $request)
 	{
 		$categories = $this->getDoctrine()
 	                   ->getRepository('ApiBundle:Category')
-	                   ->findAll();
+	                   ->findAllCategories();
+
+		$data = $this->get('ApiBundle\Service\Pagination\PaginationFactory')
+		             ->paginate($categories, $request, 'categories_index');
 
 		$categories = $this->get('jms_serializer')->serialize(
-			$categories,
+			$data,
 			'json',
 			SerializationContext::create()->setGroups(['cat_index']));
 
