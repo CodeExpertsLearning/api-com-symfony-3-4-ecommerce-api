@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\User;
 use ApiBundle\Form\UserType;
+use ApiBundle\Traits\FormErrorValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -16,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UserController extends Controller
 {
+	use FormErrorValidator;
+
 	/**
 	 * @Route("/", name="users_index")
 	 * @Method("GET")
@@ -57,6 +60,18 @@ class UserController extends Controller
 		$form = $this->createForm(UserType::class, $user);
 		$form->submit($data);
 
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+			return new JsonResponse($validation);
+		}
+
+
 		$doctrine = $this->getDoctrine()->getManager();
 		$doctrine->persist($user);
 		$doctrine->flush();
@@ -83,6 +98,18 @@ class UserController extends Controller
 
 		$form = $this->createForm(UserType::class, $user);
 		$form->submit($data);
+
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+			return new JsonResponse($validation);
+		}
+
 
 		$doctrine = $this->getDoctrine()->getManager();
 		$doctrine->merge($user);

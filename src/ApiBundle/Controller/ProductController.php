@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Product;
 use ApiBundle\Form\ProductType;
+use ApiBundle\Traits\FormErrorValidator;
 use JMS\Serializer\SerializationContext;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
@@ -19,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ProductController extends Controller
 {
+	use FormErrorValidator;
+
 	/**
 	 * @Route("/", name="products_main")
 	 * @Method("GET")
@@ -72,6 +75,17 @@ class ProductController extends Controller
 		$form = $this->createForm(ProductType::class, $product);
 		$form->submit($data);
 
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+			return new JsonResponse($validation);
+		}
+
 		$doctrine->persist($product);
 		$doctrine->flush();
 
@@ -98,6 +112,18 @@ class ProductController extends Controller
 
 		$form = $this->createForm(ProductType::class, $product);
 		$form->submit($data);
+
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+
+			return new JsonResponse($validation);
+		}
 
 		$manager->merge($product);
 		$manager->flush();

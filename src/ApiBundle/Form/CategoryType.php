@@ -22,7 +22,8 @@ class CategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ApiBundle\Entity\Category'
+            'data_class' => 'ApiBundle\Entity\Category',
+            'csrf_protection' => false
         ));
     }
 

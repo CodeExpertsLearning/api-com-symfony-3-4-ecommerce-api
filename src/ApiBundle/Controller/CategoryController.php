@@ -4,6 +4,7 @@ namespace ApiBundle\Controller;
 
 use ApiBundle\Entity\Category;
 use ApiBundle\Form\CategoryType;
+use ApiBundle\Traits\FormErrorValidator;
 use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CategoryController extends Controller
 {
+	use FormErrorValidator;
+
 	/**
 	 * @Route("/", name="categories_index")
 	 * @Method("GET")
@@ -64,6 +67,18 @@ class CategoryController extends Controller
 		$form = $this->createForm(CategoryType::class, $category);
 		$form->submit($data);
 
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+			return new JsonResponse($validation);
+		}
+
+
 		$doctrine = $this->getDoctrine()->getManager();
 		$doctrine->persist($category);
 		$doctrine->flush();
@@ -90,6 +105,17 @@ class CategoryController extends Controller
 
 		$form = $this->createForm(CategoryType::class, $category);
 		$form->submit($data);
+
+		if(!$form->isValid()) {
+			$errors = $this->getErrors($form);
+
+			$validation = [
+				'type' => 'validation',
+				'description' => 'Validação Dados',
+				'errors' => $errors
+			];
+			return new JsonResponse($validation);
+		}
 
 		$doctrine = $this->getDoctrine()->getManager();
 		$doctrine->merge($category);

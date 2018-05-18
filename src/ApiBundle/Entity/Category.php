@@ -6,12 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
 use JMS\Serializer\Annotation as JMS;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category
  *
  * @ORM\Table(name="categories")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\CategoryRepository")
+ *
  */
 class Category
 {
@@ -30,6 +32,7 @@ class Category
      *
      * @ORM\Column(name="name", type="string", length=255)
      * @JMS\Groups({"prod_single", "cat_index"})
+     * @Assert\NotBlank(message="Este campo é obrigatório")
      */
     private $name;
 
@@ -37,7 +40,8 @@ class Category
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)
-     @JMS\Groups({"cat_index"})
+     * @JMS\Groups({"cat_index"})
+     * @Assert\NotBlank(message="Este campo é obrigatório")
      */
     private $description;
 

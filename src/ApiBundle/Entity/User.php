@@ -4,6 +4,7 @@ namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -26,6 +27,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\NotBlank(message="Este campo é obrigatório")
      */
     private $firstName;
 
@@ -33,6 +35,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\NotBlank(message="Este campo é obrigatório")
      */
     private $lastName;
 
@@ -40,6 +43,8 @@ class User
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank(message="Este campo é obrigatório")
+     * @Assert\Email(message="Este campo é obrigatório")
      */
     private $email;
 
@@ -47,6 +52,7 @@ class User
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\NotBlank(message="Este campo é obrigatório")
      */
     private $password;
 
