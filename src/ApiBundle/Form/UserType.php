@@ -18,7 +18,9 @@ class UserType extends AbstractType
                 ->add('email')
                 ->add('password')
                 ;
-    }/**
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)

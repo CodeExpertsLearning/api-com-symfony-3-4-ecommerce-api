@@ -57,6 +57,9 @@ class UserController extends Controller
 		$data = $request->request->all();
 
 		$user = new User();
+		$data['password'] = $this->get('security.password_encoder')
+		                         ->encodePassword($user, $data['password']);
+
 		$form = $this->createForm(UserType::class, $user);
 		$form->submit($data);
 
@@ -95,6 +98,10 @@ class UserController extends Controller
 		if(!$user) {
 			return $this->createNotFoundException('Usuário não encontrado!');
 		}
+
+		$data['password'] = $this->get('security.password_encoder')
+		                         ->encodePassword($user, $data['password']);
+
 
 		$form = $this->createForm(UserType::class, $user);
 		$form->submit($data);

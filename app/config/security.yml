@@ -4,8 +4,10 @@ security:
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        db:
+            entity:
+                class: ApiBundle\Entity\User
+                property: email
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -14,11 +16,25 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern:  ^/api/v1/login
+            anonymous: true
+            stateless: true
+            provider: db
+            form_login:
+                check_path:               /api/v1/login_check
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
+        api:
+           pattern:   ^/api
+           stateless: true
+           guard:
+              authenticators:
+                  - lexik_jwt_authentication.jwt_token_authenticator
 
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+
+
+    encoders:
+        ApiBundle\Entity\User:
+            algorithm: bcrypt

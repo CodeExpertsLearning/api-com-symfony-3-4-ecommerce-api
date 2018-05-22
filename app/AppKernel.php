@@ -21,6 +21,7 @@ class AppKernel extends Kernel
 	        new \WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new AppBundle\AppBundle(),
             new ApiBundle\ApiBundle(),
+	        new \Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

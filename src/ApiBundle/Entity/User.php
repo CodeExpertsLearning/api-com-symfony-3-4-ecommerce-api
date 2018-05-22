@@ -4,6 +4,7 @@ namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="ApiBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -228,5 +229,29 @@ class User
     {
         return $this->updatedAt;
     }
+
+	/**
+     * User Interface - Security Component
+     */
+
+	public function getRoles()
+	{
+		return ['ROLE_USER'];
+	}
+
+	public function getSalt()
+	{
+		return null;
+	}
+
+	public function getUsername()
+	{
+		return $this->email;
+	}
+
+	public function eraseCredentials()
+	{
+		return null;
+	}
 }
 
