@@ -94,6 +94,7 @@ class UserController extends Controller
 		                 ->getRepository('ApiBundle:User')
 		                 ->find($data['id'])
 		;
+		unset($data['id']);
 
 		if(!$user) {
 			return $this->createNotFoundException('Usuário não encontrado!');
@@ -101,7 +102,6 @@ class UserController extends Controller
 
 		$data['password'] = $this->get('security.password_encoder')
 		                         ->encodePassword($user, $data['password']);
-
 
 		$form = $this->createForm(UserType::class, $user);
 		$form->submit($data);

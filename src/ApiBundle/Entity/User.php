@@ -57,7 +57,15 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="roles", type="string", length=255)
+	 * @Assert\NotBlank(message="Este campo é obrigatório")
+	 */
+	private $roles;
+
+	/**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -74,7 +82,6 @@ class User implements UserInterface
      * @Gedmo\Timestampable()
      */
     private $updatedAt;
-
 
     /**
      * Get id
@@ -236,7 +243,12 @@ class User implements UserInterface
 
 	public function getRoles()
 	{
-		return ['ROLE_USER'];
+		return !$this->roles ? [] : explode(',', $this->roles);
+	}
+
+	public function setRoles($role)
+	{
+		$this->roles = $role;
 	}
 
 	public function getSalt()

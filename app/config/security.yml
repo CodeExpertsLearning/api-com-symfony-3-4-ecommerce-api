@@ -33,7 +33,12 @@ security:
               authenticators:
                   - lexik_jwt_authentication.jwt_token_authenticator
 
+    access_control:
+        - { path: ^/api/v1, role: ROLE_USER, methods: ['GET']}
+        - { path: ^/api/v1, role: ROLE_ADMIN, methods: ['POST', 'PUT', 'DELETE']}
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
     encoders:
         ApiBundle\Entity\User:
