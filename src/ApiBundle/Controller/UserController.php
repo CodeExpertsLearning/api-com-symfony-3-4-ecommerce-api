@@ -5,6 +5,7 @@ namespace ApiBundle\Controller;
 use ApiBundle\Entity\User;
 use ApiBundle\Form\UserType;
 use ApiBundle\Traits\FormErrorValidator;
+use JMS\Serializer\SerializationContext;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -32,7 +33,8 @@ class UserController extends Controller
 		$data = $this->get('ApiBundle\Service\Pagination\PaginationFactory')
 		             ->paginate($users, $request, 'users_index');
 
-		$users = $this->get('jms_serializer')->serialize($data, 'json');
+		$users = $this->get('jms_serializer')->serialize($data, 'json',
+			SerializationContext::create()->setGroups(['user_index']));
 
 		return new Response($users, 200);
 	}
@@ -43,7 +45,8 @@ class UserController extends Controller
 	 */
 	public function show(User $user)
 	{
-		$user = $this->get('jms_serializer')->serialize($user, 'json');
+		$user = $this->get('jms_serializer')->serialize($user, 'json',
+			SerializationContext::create()->setGroups(['user_index']));
 
 		return new Response($user, 200);
 	}

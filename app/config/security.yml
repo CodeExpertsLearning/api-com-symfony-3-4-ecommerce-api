@@ -35,6 +35,7 @@ security:
 
     access_control:
         - { path: ^/api/v1, role: ROLE_USER, methods: ['GET']}
+        - { path: ^/api/v1/checkout, role: ROLE_USER, methods: ['POST']}
         - { path: ^/api/v1, role: ROLE_ADMIN, methods: ['POST', 'PUT', 'DELETE']}
 
     role_hierarchy:

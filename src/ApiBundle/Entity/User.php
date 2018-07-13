@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as GEDMO;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
+
 
 /**
  * User
@@ -21,6 +23,7 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @JMS\Groups({"user_index"})
      */
     private $id;
 
@@ -29,6 +32,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Assert\NotBlank(message="Este campo é obrigatório")
+     * @JMS\Groups({"user_index"})
      */
     private $firstName;
 
@@ -37,6 +41,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Assert\NotBlank(message="Este campo é obrigatório")
+     * @JMS\Groups({"user_index"})
      */
     private $lastName;
 
@@ -46,6 +51,7 @@ class User implements UserInterface
      * @ORM\Column(name="email", type="string", length=255)
      * @Assert\NotBlank(message="Este campo é obrigatório")
      * @Assert\Email(message="Este campo é obrigatório")
+     * @JMS\Groups({"user_index"})
      */
     private $email;
 
@@ -62,6 +68,7 @@ class User implements UserInterface
 	 *
 	 * @ORM\Column(name="roles", type="string", length=255)
 	 * @Assert\NotBlank(message="Este campo é obrigatório")
+	 * @JMS\Groups({"user_index"})
 	 */
 	private $roles;
 
@@ -71,6 +78,7 @@ class User implements UserInterface
      * @ORM\Column(name="created_at", type="datetime")
      *
      * @Gedmo\Timestampable(on="create")
+	 * @JMS\Groups({"user_index"})
      */
     private $createdAt;
 
@@ -80,8 +88,14 @@ class User implements UserInterface
      * @ORM\Column(name="updated_at", type="datetime")
      *
      * @Gedmo\Timestampable()
+     * @JMS\Groups({"user_index"})
      */
     private $updatedAt;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="UserOrder", mappedBy="user_id")
+	 */
+    private $orders;
 
     /**
      * Get id
