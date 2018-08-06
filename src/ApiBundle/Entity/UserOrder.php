@@ -49,6 +49,19 @@ class UserOrder
      */
     private $user;
 
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="pag_seguro_code", type="text", nullable=true)
+	 */
+    private $pagSeguroCode;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="pag_seguro_status", type="integer", nullable=true)
+	 */
+    private $pagSeguroStatus;
 
     /**
      * Get id
@@ -155,5 +168,46 @@ class UserOrder
     {
         return $this->user;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getPagSeguroCode() {
+		return $this->pagSeguroCode;
+	}
+
+	/**
+	 * @param string $pagSeguroCode
+	 *
+	 * @return UserOrder
+	 */
+	public function setPagSeguroCode($pagSeguroCode)
+	{
+		$this->pagSeguroCode = $pagSeguroCode;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getPagSeguroStatus()
+	{
+		return $this->pagSeguroStatus;
+	}
+
+	/**
+	 * @param string $pagSeguroStatus
+	 *
+	 * @return UserOrder
+	 */
+	public function setPagSeguroStatus($pagSeguroStatus)
+	{
+		$this->pagSeguroStatus = $pagSeguroStatus;
+
+		return $this;
+	}
+
+
 }
 
